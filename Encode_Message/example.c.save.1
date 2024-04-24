@@ -1,0 +1,109 @@
+/*
+ * Copyright (C) 2007-2018 Siemens AG
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/*******************************************************************
+ *
+ * @author Daniel.Peintner.EXT@siemens.com
+ * @author Sebastian.Kaebisch@siemens.com
+ * @version 0.9.4
+ * @contact Richard.Kuntschke@siemens.com
+ *
+ *
+ ********************************************************************/
+
+
+
+#include <stdio.h>
+#include <stdarg.h>
+#include <stdlib.h>
+
+#include <string.h>
+
+#include "EXITypes.h"
+
+#include "appHandEXIDatatypes.h"
+#include "appHandEXIDatatypesEncoder.h"
+#include "appHandEXIDatatypesDecoder.h"
+
+/* Activate support for DIN */
+#include "dinEXIDatatypes.h"
+#if DEPLOY_DIN_CODEC == SUPPORT_YES
+#include "dinEXIDatatypesEncoder.h"
+#include "dinEXIDatatypesDecoder.h"
+#endif /* DEPLOY_DIN_CODEC == SUPPORT_YES */
+
+/* Activate support for XMLDSIG */
+#include "xmldsigEXIDatatypes.h"
+#if DEPLOY_XMLDSIG_CODEC == SUPPORT_YES
+#include "xmldsigEXIDatatypesEncoder.h"
+#include "xmldsigEXIDatatypesDecoder.h"
+#endif /* DEPLOY_XMLDSIG_CODEC == SUPPORT_YES */
+
+/* Activate support for ISO1 */
+#include "iso1EXIDatatypes.h"
+#if DEPLOY_ISO1_CODEC == SUPPORT_YES
+#include "iso1EXIDatatypesEncoder.h"
+#include "iso1EXIDatatypesDecoder.h"
+#endif /* DEPLOY_ISO1_CODEC == SUPPORT_YES */
+
+/* Activate support for ISO2 */
+#include "iso2EXIDatatypes.h"
+#if DEPLOY_ISO2_CODEC == SUPPORT_YES
+#include "iso2EXIDatatypesEncoder.h"
+#include "iso2EXIDatatypesDecoder.h"
+#endif /* DEPLOY_ISO2_CODEC == SUPPORT_YES */
+
+#include "v2gtp.h"
+
+#define BUFFER_SIZE 256
+uint8_t buffer1[BUFFER_SIZE];
+uint8_t buffer2[BUFFER_SIZE];
+
+#define ERROR_UNEXPECTED_REQUEST_MESSAGE -601
+#define ERROR_UNEXPECTED_SESSION_SETUP_RESP_MESSAGE -602
+#define ERROR_UNEXPECTED_SERVICE_DISCOVERY_RESP_MESSAGE -602
+#define ERROR_UNEXPECTED_SERVICE_DETAILS_RESP_MESSAGE -603
+#define ERROR_UNEXPECTED_PAYMENT_SERVICE_SELECTION_RESP_MESSAGE -604
+#define ERROR_UNEXPECTED_PAYMENT_DETAILS_RESP_MESSAGE -605
+#define ERROR_UNEXPECTED_AUTHORIZATION_RESP_MESSAGE -606
+#define ERROR_UNEXPECTED_CHARGE_PARAMETER_DISCOVERY_RESP_MESSAGE -607
+#define ERROR_UNEXPECTED_POWER_DELIVERY_RESP_MESSAGE -608
+#define ERROR_UNEXPECTED_CHARGING_STATUS_RESP_MESSAGE -609
+#define ERROR_UNEXPECTED_METERING_RECEIPT_RESP_MESSAGE -610
+#define ERROR_UNEXPECTED_SESSION_STOP_RESP_MESSAGE -611
+#define ERROR_UNEXPECTED_CABLE_CHECK_RESP_MESSAGE -612
+#define ERROR_UNEXPECTED_PRE_CHARGE_RESP_MESSAGE -612
+#define ERROR_UNEXPECTED_CURRENT_DEMAND_RESP_MESSAGE -613
+#define ERROR_UNEXPECTED_WELDING_DETECTION_RESP_MESSAGE -614
+
+
+static int writeStringToEXIString(char* string, exi_string_character_t* exiString) {
+	int pos = 0;
+	while(string[pos]!='\0')
+	{
+		exiString[pos] = string[pos];
+		pos++;
+	}
+
+	return pos;
+}
+
+static void printASCIIString(exi_string_character_t* string, uint16_t len) {
+	unsigned int i;
+	for(i=0; i<len; i++) {
+		printf("%c",(char)string[i]);
+	}

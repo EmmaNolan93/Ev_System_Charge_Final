@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EV Charging System</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/foundation/6.3.1/css/foundation.min.css">
+    <style>
+        body {
+            font-family: 'Helvetica', sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        button, input[type="text"], input[type="checkbox"] {
+            margin-bottom: 10px;
+        }
+
+        .notification {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .button-group button {
+            margin-right: 10px;
+        }
+
+        #chargingParametersForm {
+            display: none;
+        }
+
+        #chargingHistory, #accountManagement {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>EV Charging System</h1>
+
+    <!-- Charging Initiation -->
+    <div class="button-group">
+        <button class="button" onclick="initiateCharging()">Initiate Charging</button>
+    </div>
+
+    <!-- Charging Parameters Form -->
+    <form id="chargingParametersForm">
+        <label for="chargingLevel">Charging Level:</label>
+        <input type="text" id="chargingLevel" placeholder="Enter charging level">
+
+        <label for="trickleCharge">Trickle Charge:</label>
+        <input type="checkbox" id="trickleCharge">
+
+        <div class="button-group">
+            <button class="success button" onclick="submitChargingParameters()">Start Charging</button>
+        </div>
+    </form>
+
+    <!-- Charging Completion Notification -->
+    <div id="chargingCompletionNotification" class="notification"></div>
+
+    <!-- Database and Front-End Application -->
+    <div class="button-group">
+        <button class="button" onclick="showChargingHistory()">Charging History</button>
+        <button class="button" onclick="showAccountManagement()">Account Management</button>
+    </div>
+
+    <!-- Charging History -->
+    <div id="chargingHistory" class="callout" style="display: none;">
+        <!-- Display charging history here -->
+    </div>
+
+    <!-- Account Management -->
+    <div id="accountManagement" class="callout" style="display: none;">
+        <!-- Display account management options here -->
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/foundation/6.3.1/js/vendor/jquery.js"></script>
+<script src="https://cdn.jsdelivr.net/foundation/6.3.1/js/vendor/what-input.js"></script>
+<script src="https://cdn.jsdelivr.net/foundation/6.3.1/js/foundation.min.js"></script>
+
+<script>
+    $(document).foundation();
+
+    function initiateCharging() {
+        document.getElementById('chargingParametersForm').style.display = 'block';
+    }
+
+    function submitChargingParameters() {
+        // Implement the logic to submit charging parameters to Raspberry Pi
+        // and display completion notification
+        document.getElementById('chargingCompletionNotification').innerText = 'Charging initiated successfully!';
+        document.getElementById('chargingCompletionNotification').style.display = 'block';
+    }
+
+    function showChargingHistory() {
+        // Implement logic to fetch and display charging history
+        document.getElementById('chargingHistory').style.display = 'block';
+    }
+
+    function showAccountManagement() {
+        // Implement logic to display account management options
+        document.getElementById('accountManagement').style.display = 'block';
+    }
+</script>
+
+</body>
+</html>
+
